@@ -3,9 +3,9 @@ do unholy things to python
 
 Mostly esoteric python.
 
-# BEWARE OF THE DEATH MODULE. IF YOU RUN ANY OF ITS CODE, THERE WILL BE MUCH WEEPING AND GNASHING OF TEETH.
+*BEWARE OF THE DEATH MODULE. IF YOU RUN ANY OF ITS CODE, THERE WILL BE MUCH WEEPING AND GNASHING OF TEETH.*
 
-*XD License 6.9*
+# XD License 6.9
 
 Layman stuffs:
 1. Do whatever the fuck you want as long as it has at least one of my many names on or in it somewhere.

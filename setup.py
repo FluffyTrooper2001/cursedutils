@@ -4,7 +4,7 @@ HERE=pathlib.Path(__file__).parent
 README=(HERE/"README.md").read_text()
 setup(
     name="cursedutils",
-    version="4.2.0",
+    version="4.2.1",
     description="Do unholy things to python",
     long_description=README,
     long_description_content_type="text/markdown",
@@ -13,7 +13,6 @@ setup(
     author_email="michaelisaiah01@gmail.com",
     license="XD License",
     classifiers=[
-        "License :: UnLicence :: XD License",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.9"
     ],

@@ -1,9 +1,29 @@
 # cursedutils
-do unholy things to python
+do unholy things to python in order to aid developers to do unholy things to python.
 
-Mostly esoteric python.
+# API
+This module uses an advanced field of python called "Esoteric Python" in order to optimise the terribleness of the code.
 
+# cursed.py
+Miscellaneous code is kept here, if it cannot be categorised into the following:
+
+# death.py
 *BEWARE OF THE DEATH MODULE. IF YOU RUN ANY OF ITS CODE, THERE WILL BE MUCH WEEPING AND GNASHING OF TEETH.*
+
+# iostreams
+c++ is now valid python syntax.
+also, bugger calling the exit function.
+NOTE: this module may cause difficulties when printing globals(). dict may need to be hacked to prevent exit from executing when globals() is printed.
+
+# wrappers
+decorate your functions and classes using the @ symbol followed by any callable expression.
+classes can become object instantiation statements!
+
+# pep ripoffs
+code designed to chuck off at Python Enhancement Proposals or substitute them with minimalist code.
+
+# natural number syntax
+the original idea behind the module, kept for legacy, despite its many bugs.
 
 # XD License 6.9
 

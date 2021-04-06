@@ -19,5 +19,4 @@ setup(
     ],
     packages=['cursedutils'],
     include_package_data=True,
-    install_requires=["ctypes","random","os","sys"],
     entry_points={"console_scripts":["cursedutils=cursedutils.__main__:main"]})

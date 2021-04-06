@@ -1,17 +1,34 @@
 import sys,os
 class Str(str):__repr__=lambda s:"";__invert__=__pos__=__neg__=lambda s:s.__str__();__int__=lambda s:int(s);__str__=str
 class File:
- __init__  =lambda s,f:s.__setattr__('f',f.__str__());__invert__=lambda s:os.remove(s.f)and None
- __le__    =lambda s,o:[(f:=open(s.f,'w')).write(str(o)),f.close()]and Str(o)
- __lshift__=lambda s,o:[(f:=open(s.f,'a')).write(str(o)),f.close()]and Str(o)
- __ge__    =lambda s,o:[(fo:=open(o.f,'w')).write((c:=(fs:=open(s.f,'r')).read())),fo.close(),fs.close()]and Str(c)
- __rshift__=lambda s,o:[(fo:=open(o.f,'a')).write((c:=(fs:=open(s.f,'r')).read())),fo.close(),fs.close()]and Str(c)
- __lt__    =lambda s,t:[(b:=(f:=open(s.f,'r+')).read(t[0])+t[1]),(a:=f.read()),f.seek(0),f.write(b+a),f.close()]and Str(t[1])
- __eq__    =lambda s,p:[(f:=[open(s.f),open(p.f)]),(c:=f[0].read()==f[1].read()),f[0].close(),f[1].close()]and Str(c)
- __gt__    =lambda s,t:t[1]<(t[0],str(s));__str__=lambda s:[(c:=(f:=open(s.f,'r')).read()),f.close()]and Str(c)
- __and__   =lambda s,o:s and o;__or__=lambda s,o:s or o
- __pos__   =lambda s:open(s.f,'w').close()or s;__repr__=__neg__=lambda s:[(f:=open(s.f,'r')).read(),f.close()][0];__int__=lambda s:len(-s)
- def __bool__(s):os.path.exists(s.__getattribute__('f'))
+ """File object with intuitive, command-prompt-like syntactic sugar, without io blocking."""
+ # dunders
+ __init__  =lambda s,f:s.__setattr__('name',f.__str__())or s.__setattr__('__p',0)
+ __neg__   =lambda s:os.remove(s.name)and None
+ __pos__   =lambda s:open(s.name,'w').close()or s
+ __lt__    =lambda s,o:[(f:=open(s.name,'w')).write(str(o)),f.close()]and Str(o)
+ __lshift__=lambda s,o:[(f:=open(s.name,'a')).write(str(o)),f.close()]and Str(o)
+ __gt__    =lambda s,o:[(fo:=open(o.name,'w')).write((c:=(fs:=open(s.name,'r')).read())),fo.close(),fs.close()]and Str(c)
+ __rshift__=lambda s,o:[(fo:=open(o.name,'a')).write((c:=(fs:=open(s.name,'r')).read())),fo.close(),fs.close()]and Str(c)
+ __le__    =lambda s,t:[(b:=s.read(t[0])+t[1]),(a:=f.read()),f.seek(0),f.write(b+a),f.close()]and Str(t[1])
+ __eq__    =lambda s,p:s.name==p.name# or s.read()==p.read() #<review>
+ __ge__    =lambda s,t:t[1]<=(t[0],str(s)) # [__str__]
+ __and__   =lambda s,o:s and o# []
+ __or__    =lambda s,o:s or o # []
+ __str__=__repr__=lambda s:s.read() # [read]
+ __int__   =lambda s:len([(f:=open(s.name)).read(),f.close()][0]) # [__init__]
+ __bool__  =lambda s:os.path.exists(s.name) # [__init__]
+ # file-like-methods
+ read=lambda s,n =- 1:[(f:=open(s.name,'r')).read(n if n>0 else n and int(s)),f.close()][0]if self.readable else NotImplemented # [__int__]
+ write=lambda self, s:[(f:=open(self.name,'w')).write(s),f.close()][0]if self.writable else NotImplemented # [__init__]
+ readable,writable,seekable,closed=True,True,True,False # []
+ seek=lambda s,p,m=0:setattr(s,'__p',p if not m else s.__p+p if m<0 else int(s)-p)if s.seekable else NotImplemented # [__int__]
+ reconfigure=lambda s,d='r+',**k:[setattr(s,n,v)for n,v in({'readable':'r'in d or'+'in d,'writable':'w'in d or'+'in d or'a'in d,'seekable':True}|k).items()]
+ # idk
+ _CHUNK_SIZE,write_through=8192,False
+ close=flush=lambda*a,**k:None # []
+ fileno=lambda s:[(f:=open(s.name,'r')).fileno(),f.close()][0] # [__init__]
+ buffer=type("None",(object,),{'__doc__':"Does not need a buffer"})()
 @lambda f:f()
 class std:
  """Initialises with stdout, stdin, stderr with default values at the sys settings
@@ -41,7 +58,7 @@ class std:
  __le__    =lambda s,o:[s.stderr.write(o.__str__())]and Str(o)
  __ge__    =lambda s,o:o<=-s;__rshift__=lambda s,o:o<<-s;__name__=str("std".__str__()).__str__()
  __gt__    =lambda s,o:o[1]<(o[0],-s)if hasattr(o,'__iter__')and isinstance(o[0],int)else o<-s;__getitem__=lambda s,o:getattr(s,o)
- __lt__    =lambda s,o:[s.stdout.write((c:=(f:=open(o.f,'r')).read())),f.close()]and Str(c)if hasattr(o,'f')else s<<-o
+ __lt__    =lambda s,o:[s.stdout.write((c:=(f:=open(o.name,'r')).read())),f.close()]and Str(c)if hasattr(o,'f')else s<<-o
  __bool__  =lambda s:not any([s.stdout.closed(),s.stdin.closed(),s.stderr.closed()])
  __eq__    =lambda a,b:isinstance(b,a.__class__)and a.stdout==b.stdout and a.stdin==b.stdin and a.stderr==b.stderr;__ne__=lambda a,b:not a==b
  __invert__=lambda s  :[s.stdout not in[sys.stdout,sys.__stdout__]or s.stdout.close(),
@@ -71,7 +88,7 @@ class cd:
  os=os;__call__=lambda s,n=None:n is None and os.getcwd()or os.chdir(n)or os.getcwd()
  __neg__=__invert__=lambda s:os.getcwd();__pos__=lambda s:os.path.realpath(-s)
  __gt__=__ge__=lambda s,o:o<=os.getcwd();__rshift__=lambda s,o:o<<os.getcwd()
- __lt__=lambda s,o:s<<[(f:=open(o.f)).read(),f.close()][0]; __repr__=lambda s:~s
+ __lt__=lambda s,o:s<<[(f:=open(o.name)).read(),f.close()][0]; __repr__=lambda s:~s
  __le__=__lshift__=lambda s,d:os.chdir(d.__str__())or-s;__ne__=lambda a,b:not a==b
  __eq__=lambda s,d:os.path.realpath(os.getcwd())==os.path.realpath(d)
 @lambda c:c()

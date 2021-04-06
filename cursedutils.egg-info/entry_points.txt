@@ -1,0 +1,3 @@
+[console_scripts]
+cursedutils = cursedutils.__main__:main
+

@@ -1,2 +1,1 @@
-
-from pep_ripoffs import *
+from.pep_ripoffs import*

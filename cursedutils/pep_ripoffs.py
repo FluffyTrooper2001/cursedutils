@@ -1,12 +1,7 @@
-from.wrappers import*
+from.wrappers import execute_with
 #PEP 3150 "given" status=deferred
-class PEP3150_Given_BaseClass:
- def __init__(s,**k):[setattr(s,this,that)for this,that in k.items()]
-class PEP3150_Given_MetaClass(type):
- def __init__(cls,name,parents,attrs):
-  for i,attr in enumerate(attrs):
-    if hasattr(attr,'__call__'):attrs[i]=attr()
-  super().__init__(name,parents,attrs)
+class Given:
+ def __init__(s,**k):([setattr(s,this,that)for this,that in k.items()],[setattr(s,this,getattr(s,this)())for this in dir(s.__class__)if hasattr(this,'__call__')and not this[0]=='_'])
 def _pep3150_example(a=4,b=5,op=lambda x,y:x*y):
  """PEP 3150 example:
 op(?.f, ?.g) given bound_a=a, bound_b=b in:
@@ -15,9 +10,10 @@ op(?.f, ?.g) given bound_a=a, bound_b=b in:
     def g():
         return bound_a - bound_b
 """
- @execute_with(bound_a=a,bound_b=b)
- class given(PEP3150_Given_BaseClass,metaclass=PEP3150_Given_MetaClass):
+ @print
+ @lambda _: op(_.f, _.g)
+ @execute_with(bound_a=a, bound_b=b)
+ class evaluate(Given):
   def f(s):return s.bound_a + s.bound_b
   def g(s):return s.bound_a - s.bound_b
- return op(given.f,given.g)
 

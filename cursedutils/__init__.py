@@ -1,5 +1,5 @@
 try:
- from.import cursed,death,wrappers,iostreams,pep_ripoffs
+ from.import cursed,death,wrappers,iostreams
  import __main__ as ctx
  from.import __main__ as main
  __import__('sys').modules['cursedutils']=type("cursed.module",(),globals())

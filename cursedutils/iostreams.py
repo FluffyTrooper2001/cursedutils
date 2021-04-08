@@ -2,33 +2,38 @@ import sys,os
 class Str(str):__repr__=lambda s:"";__invert__=__pos__=__neg__=lambda s:s.__str__();__int__=lambda s:int(s);__str__=str
 class File:
  """File object with intuitive, command-prompt-like syntactic sugar, without io blocking."""
+ name=''
  # dunders
- __init__  =lambda s,f:s.__setattr__('name',f.__str__())or s.__setattr__('__p',0)
- __neg__   =lambda s:os.remove(s.name)and None
- __pos__   =lambda s:open(s.name,'w').close()or s
- __lt__    =lambda s,o:[(f:=open(s.name,'w')).write(str(o)),f.close()]and Str(o)
- __lshift__=lambda s,o:[(f:=open(s.name,'a')).write(str(o)),f.close()]and Str(o)
- __gt__    =lambda s,o:[(fo:=open(o.name,'w')).write((c:=(fs:=open(s.name,'r')).read())),fo.close(),fs.close()]and Str(c)
- __rshift__=lambda s,o:[(fo:=open(o.name,'a')).write((c:=(fs:=open(s.name,'r')).read())),fo.close(),fs.close()]and Str(c)
- __le__    =lambda s,t:[(b:=s.read(t[0])+t[1]),(a:=f.read()),f.seek(0),f.write(b+a),f.close()]and Str(t[1])
+ __init__  =lambda s,f='':s.__setattr__('name',f.__str__())or s.__setattr__('__p',0)or setattr(s,'__r',False)
+ __neg__   =lambda s:[os.remove(s.name),s.reconfigure('',seekable=False,closed=True)]and s
+ __pos__   =lambda s:[open(s.name,'w').close()or s,s.reconfigure('w+',seekable=True)][0]
+ __lt__    =lambda s,o:[s.write(str(o))]and s # [write]
+ __lshift__=lambda s,o:[s.write([(h:=s.tell()),s.read()][1]+['\n',s.seek(h)][0]+o)]and s # [read, write]
+ __gt__    =lambda s,o:[o.write(s.read())]and o # [read, write]
+ __rshift__=lambda s,o:[o.write(o.read()+'\n'+s.read())]and o # [read, write]
+ __le__    =lambda s,t:[(b:=s.read(t[0])+t[1]),(a:=s.read()),s.seek(0),s.write(b+a)]and s # [read, seek, write]
  __eq__    =lambda s,p:s.name==p.name# or s.read()==p.read() #<review>
  __ge__    =lambda s,t:t[1]<=(t[0],str(s)) # [__str__]
  __and__   =lambda s,o:s and o# []
  __or__    =lambda s,o:s or o # []
- __str__=__repr__=lambda s:s.read() # [read]
+ __str__   =lambda s:s.read() # [read]
+ __repr__  =lambda s:f'File({os.path.realpath(s.name)})' # [__init__]
  __int__   =lambda s:len([(f:=open(s.name)).read(),f.close()][0]) # [__init__]
- __bool__  =lambda s:os.path.exists(s.name) # [__init__]
- # file-like-methods
- read=lambda s,n =- 1:[(f:=open(s.name,'r')).read(n if n>0 else n and int(s)),f.close()][0]if self.readable else NotImplemented # [__int__]
- write=lambda self, s:[(f:=open(self.name,'w')).write(s),f.close()][0]if self.writable else NotImplemented # [__init__]
+ __bool__  =lambda s:os.path.exists(s.name) # [__init__] # file-like-methods
+ def read(s,n =- 1):
+  if not s.readable:return NotImplemented
+  with open(s.name,'r') as f:f.seek(s.__p);n=n if n>0 else n and int(s);f.read(n);s.__p=f.tell()
+ write=lambda self,s='':[(f:=open(self.name,'w')).write(str(s)),f.close()][0]if self.writable else NotImplemented # [__init__]
  readable,writable,seekable,closed=True,True,True,False # []
  seek=lambda s,p,m=0:setattr(s,'__p',p if not m else s.__p+p if m<0 else int(s)-p)if s.seekable else NotImplemented # [__int__]
- reconfigure=lambda s,d='r+',**k:[setattr(s,n,v)for n,v in({'readable':'r'in d or'+'in d,'writable':'w'in d or'+'in d or'a'in d,'seekable':True}|k).items()]
+ reconfigure=lambda s,d='r+',**k:[setattr(s,n,v)for n,v in({'readable':'r'in d or'+'in d,'writable':'w'in d or'+'in d or'a'in d,'seekable':True,'__r':'b'in d}|k).items()]
  # idk
- _CHUNK_SIZE,write_through=8192,False
- close=flush=lambda*a,**k:None # []
+ _CHUNK_SIZE,write_through=8192,False 
+ raw=lambda s:setattr(s,'__r',True) # [__r]
+ flush=lambda*a,**k:None # []
+ close,open=lambda s:setattr(s,'closed',True),lambda s:setattr(s,'closed',False)
  fileno=lambda s:[(f:=open(s.name,'r')).fileno(),f.close()][0] # [__init__]
- buffer=type("None",(object,),{'__doc__':"Does not need a buffer"})()
+ buffer=type("None",(object,),{'__doc__':"Does not need a buffer"})() # []
 @lambda f:f()
 class std:
  """Initialises with stdout, stdin, stderr with default values at the sys settings
@@ -73,8 +78,8 @@ class wait:
  __sub__=lambda s,o:-s and-s
  __neg__=lambda s:_sleep(1)
  __pos__=lambda s:_sleep(2)
- __invert__=lambda s:sleep(0.1)
- __call__=__lshift__=__rshift__=__lt__=__gt__=__ge__=__le__=__eq__=__ne__=__mod__=__or__=__xor__=__matmul__=lambda s,o=1:sleep(o)
+ __invert__=lambda s:_sleep(0.1)
+ __call__=__lshift__=__rshift__=__lt__=__gt__=__ge__=__le__=__eq__=__ne__=__mod__=__or__=__xor__=__matmul__=lambda s,o=1:_sleep(o)
 @lambda f:f()
 class delete:__lshift__=__rshift__=__le__=__lt__=__gt__=__ge__=__eq__=__ne__=__call__=lambda s,o:~o or s
 @lambda f:f("\b"*4+"exit << EXITCODE",'\b'*6)
@@ -134,6 +139,6 @@ ls >, >>, >= *args :: see help>File for more information
 @lambda c:c()
 class help:__call__=__lshift__=__lt__=__le__=__gt__=__ge__=__rshift__=lambda s,n="":__help__[n or'__call__'];__invert__=__neg__=__pos__=__repr__=__str__=lambda s:s();__getattr__=lambda s,a:s(a);__setattr__=lambda a,b,c:c<<a(b)
 int=type("statement",(int,),dict(__getattr__=lambda s,o:globals().update({o:type("Int",(globals()['__builtins__'].int,),dict(named_as=lambda self, name:setattr(self,"__name__",name)or self))(0).named_as(o)})or s,__call__=lambda s,*a:type("",(),{'__enter__':lambda s:a,'__exit__':lambda s,*b:True})()))()
-cout=type('.',(),{'__repr__':lambda s:"\n","__lshift__":lambda s,o:print(o,end='')or s})()
+cout=type('.',(),{'__repr__':lambda s:"\n","__lshift__":lambda s,o:print(o,end='')or s,'__lt__':print,'__le__':lambda s,o:print(end=o)or o,'__rrshift__':lambda s,o:s<<o})()
 cin=type('..',(),{'__rshift__':lambda s,o:globals().update({o.__name__:o.__class__(input()).named_as(o.__name__)})})()
 

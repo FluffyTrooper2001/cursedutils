@@ -14,14 +14,29 @@ def Switch():
     named_as=lambda n:lambda f:setattr(f,'__name__',n)or f
     @call()
     class case:
-     def __init__(self): self.state, self.value = -1, None
+     def __init__(self): self.state, self.value =- 1, None
      def __getitem__(self, item):
-      if self.state <=- 1:  raise SyntaxError("Cannot find matching switch") # __annotations__ hack only works in globals
-      if self.value == item and not self.state: self.state=1; return(lambda f,*u,**ck:f(*u,**ck))
-      else:                 return(lambda *No, **ne:None) # XD
+      if self.state <- 0:raise SyntaxError("Cannot find matching switch") # __annotations__ hack only works in globals
+      if self.value == item and not self.state:self.state=1;return(lambda f,*u,**ck:f(*u,**ck))
+      else:return(lambda*No,**ne:None) # XD
     def switch(value):case.value,case.state = value,0
-    @named_as('default') # just for you XD.
+    @named_as('default')
     def otherwise(f,*u,**ck):
-      if case.state <- 0 :  raise SyntaxError("Cannot find matching switch")
-      elif not case.state:  case.state =- 1; f(*u,**ck)
-    return switch, case, otherwise #   ^ this is deliberate. XD
+      if case.state <- 0 :raise SyntaxError("Cannot find matching switch")
+      elif not case.state:case.state =- 1;f(*u,**ck)
+    return switch, case, otherwise
+class struct:
+ @classmethod
+ def bootstrap(c,__g):
+  try:assert __g
+  except AssertionError as e:__g=e.__traceback__.tb_frame.f_back.f_globals
+  @lambda f:setattr(__import__('ctypes').py_object.from_address(id(__g)+8),'value',type("dict",(dict,),{'__missing__':f}))
+  def __missing__(self,key):
+   try:return getattr(__builtins__,key)
+   except:self[key]=c()
+   return self[key]
+ def __getattr__(self,v):
+  try:return(f:=lambda:object.__getattr__(self,v))()
+  except AttributeError:setattr(self,v,self.__class__())
+  return f()
+

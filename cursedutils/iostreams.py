@@ -110,18 +110,8 @@ ls(dir : OPTIONAL str) :: lists directory contents
 cd(dir : OPTIONAL str) :: sets or displays current working directory
 delete(filename : str) :: deletes a file
 exit(code : OPTIONAL str) exits with optional exit code or exit code 0
-""",       File=   """File(filename) <= str :: overwrite file
-File(filename) << str :: append to file
-File(filename) < (int, str) :: insert str at int in file
--File(filename), ~File(filename) :: read file
-+File(filename) :: wipe file
-repr(File(filename)) :: read file (at terminal :: File(filename))
-str(File(filename)) :: read file
-bool(File(filename)) :: returns True if file exists and is not empty
-File(filename) >= File(other) :: pipe contents to other file
-File(filename) >> File(other) :: append contents to other file
-File(filename) > (int, File(other)) :: insert contents in other file at int
-""",       cd =   """-cd, ~cd, repr(cd), str(cd) :: return cd
+""",       File=File.__doc__,
+           cd =   """-cd, ~cd, repr(cd), str(cd) :: return cd
 +cd :: return absolute path
 cd <<, <=, < dir : str :: set directory
 cd >, >>, >= *args :: see : help>File : for more information

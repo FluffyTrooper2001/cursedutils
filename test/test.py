@@ -42,9 +42,11 @@ try:
         except: cout < "Crashed too hard for an exit code"
         else: assert cout << "Exit Code: " <= err
         assert not -File("kill.py")
-        cout < 'r'
+        cout<'r'
     @case[8]
     def do():
-        
+        cout<chr(10*10)
+    @otherwise
+    def do():'!'>cout
+except:cout<'FAILED'
 
-        

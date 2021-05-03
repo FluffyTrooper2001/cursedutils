@@ -32,9 +32,9 @@ try:
     case[3](print,'l')
     case[4](print,'o')
     @case[5]
-    def do():cout << "Current directory: " <- cd < " "
+    def do():cout << "Current directory: " <- cd and cout<" "
     @case[6]
-    def do():cout << "Contents of cd: " <- ls < "W"
+    def do():cout << "Contents of cd: " <- ls and cout<"W"
     @case[7]
     def do():
         +File("kill.py") <"from cursedutils.death import kill_python"<<"kill_python()"<<''

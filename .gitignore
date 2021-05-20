@@ -1,6 +1,10 @@
 __pycache__/*
+__pycache__
 *.py[cod]
 .idea/*
+.idea
 */.idea/*
 .github/*
 _*.yml
+*.iml
+*.xml

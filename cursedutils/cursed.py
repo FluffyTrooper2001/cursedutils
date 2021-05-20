@@ -22,65 +22,51 @@ def Switch():
       elif not case.state:case.state =- 1;f(*u,**ck)
     return switch, case, otherwise
 # dot notation
-hack=lambda victim:py_object.from_address(id(victim)+8)
-class struct:
- __dims__,__list__,__dict__=(0,0),[],{}
- __bool__=lambda s:all(__dims__)
- def __init__(s,*a,**k):
-    setattr=__builtins__.object.__setattr__
-    getattr=__builtins__.object.__getattribute__
-    setattr(s,'__dict__',k)	
-    if a and a[0]in[[],{},()]or(isinstance(a[0],getattr(s,'__class__'))and not all(getattr(a[0],'__dims__'))):assert not k
-    elif not a:setattr(s,'__dims__',(1,1))or k and(getattr(s,'__list__').append(k),setattr(s,'__dict__',k))or getattr(s,'__list__').append([])
-    elif a[0].__class__ is s.__class__:setattr(s,'__list__',getattr(a[0],'__list__'))or setattr(s,'__dims__',getattr(a[0],'__list__'))
-    elif len(a)==2 and getattr(a[1],__class__)is set:
-      setattr(s,'__list__',[{a[0]:b}for b in a[1]])
-      setattr(s,'__dims__',(1,len(getattr(s,'__list__'))))
-    elif len(a)==1:
-      try:setattr(s,'__dims__',(1,len(a[0])));setattr(s,'__list__',[dict(derp)for derp in a[0]])
-      except:raise ValueError('object cannot be converted to a struct')
-    else:
-      getattr(s,'__list__').append({})
-      for f,v in zip(a[::2],a[1::2]):getattr(self,'__list__')[0]|={f:v}
-      getattr(self,'__list__')[0]|=k
-    for d in getattr(s,'__list__')[::-1]:getattr(self,'__dict__').update(d)
- def __getattr__(s,a):
-    setattr=__builtins__.object.__setattr__
-    getattr=__builtins__.object.__getattribute__
-    v=[d[a]if a in d else[]for d in getattr(s,'__list__')]
-    try:        v ,=              (v)
-    except:     v=__builtins__.set(v)
-    if          v:        return  (v)
-    elif a in getattr(s,'__dict__'):return getattr(s,'__dict__')[a]
-    else:getattr(s,'__dict__').update({a:getattr(s,'__class__')()})
-    return getattr(s,'__dict__')[a]
- def __call__(s,*x):
-   if not len(x)-1:x=(1,x[0])
-   x,y=(x[0]-1,x[1]-1)if all(x)else x
-   return getattr(s,'__class__')([getattr(s,'__list__')[x*getattr(s,'__dims__')[1]+y]])
- @classmethod
- def bootstrap(c,__g={}):
-  import attr
-  try:assert __g
-  except AssertionError as e:__g=e.__traceback__.tb_frame.f_back.f_globals
-  @lambda s:setattr(c,'gulag',s)
-  class gulag(metaclass=lambda*a:attr.s(type(*a))(hack(__g))):
-   victim:type=attr.ib(dict)
-   def __del__(self):hack(__g).value=self.victim
-  @lambda __missing__:setattr(hack(globals()),'value',type('dict',(gulag.victim,),{'__missing__':__missing__}))
-  def __missing__(self,key):
-    try:return getattr(__builtins__,key)
-    except:self[key] =_= struct()
-    object.__setattr__(_,'__name__',key)
-    return _
- __repr__=lambda s:f"""{object.__getattribute__(s,'__name__')} =
-    struct {object.__getattribute__(s,'__dims__')[0]}x{object.__getattribute__(s,'__dims__')[1]}{''.join([chr(10)+a for a in object.__getattibute__(s,'__dict__')])}"""
- def __setattr__(self,n,v):
-  if isinstance(v,(lambda:None).__class__):
-    victim=__import__('ctypes').py_object.from_address(id(self)+8)
-    victim.value=type("struct",(victim.value,),{n:v})
-  elif isinstance(v,print.__class__):
-    victim=__import__('ctypes').py_object.from_address(id(self)+8)
-    victim.value=type("struct",(victim.value,),{n:lambda s,*a,**k:v(*a,**k)})#bound builtin behaviour
-  else:getattr(self,'__dict__').update({n:v})
-
+hack=lambda victim:__import__('ctypes').py_object.from_address(id(victim)+8)
+def _bootstrap(*a):
+  from ctypes import*
+  if __name__!='__main__':g = __import__('sys')._getframe(2).f_globals
+  else:g = globals()
+  victim = hack(g).value
+  a[2] |= {'gulag':victim}
+  struct = type(*a)
+  class global_dict(victim):
+    def __del__(self): print('exiting corrupted globals...')
+    def __missing__(self, key):
+      if key in dir(__builtins__):return getattr(__builtins__,key)
+      else:
+        new = struct()
+        object.__setattr__(new, '__name__', key)
+        return new
+  hack(g).value = global_dict
+  return struct
+class struct(list,metaclass = bootstrap):
+  gulag:type = dict
+  __name__ = globals().get('__name__','<string>')
+  def __del__(self):hack(self).value=object.__getattribute__(self, 'gulag')
+  def __repr__(self):
+    getattr = object.__getattribute__
+    __dict__ = getattr(self, '__dict__')
+    __name__ = getattr(self, '__name__')
+    return f"<struct '{__name__}' size={len(__dict__)}>"
+  def __getattribute__(self, key):
+    getattr = object.__getattribute__
+    __class__ = type(self)
+    __dict__ = getattr(self, '__dict__')
+    __name__ = getattr(self, '__name__')
+    if key not in [*dir(__class__),*__dict__]:
+      self.__dict__[key] = new = __class__()
+      object.__setattr__(new, '__name__', key)
+      if key.startswith('__')and key.endswith('__'):
+         hack(self).value = type('struct',(__class__,),{key:new,'__name__':__name__+'.'+key})
+      return new
+    return self.__dict__[key]
+  def __setattr__(self, key, value):
+    getattr = object.__getattribute__
+    __class__ = getattr(self,'__class__')
+    __dict__ = getattr(self, '__dict__')
+    self.__dict__[key] = value
+    if isinstance(value, struct) or issubclass(value.__class__, struct):
+      object.__setattr__(struct, '__name__', getattr(self, '__name__')+'.'+key)
+    if key.startswith('__')and key.endswith('__'):
+      hack(self).value = type('struct',(__class__,),{key:value})

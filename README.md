@@ -11,6 +11,7 @@ This module uses an advanced field of python called "Esoteric Python" in order t
 Miscellaneous code is kept here, if it cannot be categorised into the following:
 
 # death.py
+McNuke class is for recreational purposes only. 
 *BEWARE OF THE DEATH MODULE. IF YOU RUN ANY OF ITS CODE, THERE WILL BE MUCH WEEPING AND GNASHING OF TEETH.*
 
 # iostreams

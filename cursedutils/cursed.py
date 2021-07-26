@@ -167,7 +167,9 @@ class hack:
       hack(victim).value = prisoner
 
 def test_hacker():
-    with hack(True, int, False, int): print (False, not 0, not 1)
+    with hack(True, int, False, int,type,type('type',(hack(type).value,),{'__getattribute__':print})):
+        print (False, not 0, not 1)
+        type. hello_world;
     print (False, not 0, not 1)
 
 # dot notation

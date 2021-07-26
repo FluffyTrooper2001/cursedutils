@@ -29,20 +29,21 @@ class quick_encode:
       {_ and(r:=r.replace('23',''))for _ in iter(lambda:'23'in r,False)},{_ and(r:=r.replace('32',''))for _ in iter(lambda:'32'in r,False)}
     );s.r=r;print({print(end={'2':'+','3':'-','4':'<','5':'>','6':'.','7':',','8':'[','9':']'}[i])for i in r if i not in['0','1']}and'')
 def decode(n):
-  l,a,o=len(s:=str(int(n))),_dependancies['defaultdict'](int),str();i=p=a[int()];c=8;t=0
-  while len(s)>p:
-    def _2():a[i]+=1;a[i] %=1<<+ c;return i,c,o,t # %=1<<+
-    def _3():a[i]-=1;a[i] %=1<<+ c;return i,c,o,t # i made "coerce encoding" operator
-    _4,_5=lambda:(+i+ 1,c,o,t),lambda:(+i- 1,c,o,t)
-    _6=lambda:(i,c,print(end=chr(a[i]))or o+chr(a[i]),t)
-    def _7():a[i]=ord(__import__('sys').stdin.read(1));return i,c,o,t
-    _8,_9=lambda:(i,c,o,t+(not bool(a[i]))),lambda:(i,c,o,t-bool(a[i]))
-    _0,_1=lambda:(i,c+1%32,o,t),lambda:(i,c-1%32,o,t)
-    i,c,o,t=[_0,_1,_2,_3,_4,_5,_6,_7,_8,_9][int(s[p])]()if not t else (
-      i,c,o,t -(t >+ int()and s[p]=='9')- -(t <+ int()and s[p]=='8')
-    );p+=1-2 *+ (t <- int()) # i run out of fancy augmented operators :/ gimme more!
-    if p <- int():raise SyntaxError('mismatched 9')
-  return type('invisible_list',(list,),{'__repr__':lambda s:''})([ord(k)for k in o])
+  l,a,o=len(s:=str(int(n))),_dependancies['defaultdict'](int),str();i=p=a[int()];c=8;t=0# turing machine for instruction reading
+  while p<l:#halting state
+    # update func scope
+    def _2():a[i]+=1;a[i]%=1<<+c;return i,c,o,t#looped increment
+    def _3():a[i]-=1;a[i]%=1<<+c;return i,c,o,t#looped decrement
+    _4,_5=lambda:(+i+ 1,c,o,t),lambda:(+i- 1,c,o,t)#cell shift
+    _6=lambda:(i,c,print(end=chr(a[i]))or o+chr(a[i]),t)#push char to stdout
+    def _7():a[i]=ord(__import__('sys').stdin.read(1));return i,c,o,t#pull char from stdin
+    _8,_9=lambda:(i,c,o,t+(not bool(a[i]))),lambda:(i,c,o,t-bool(a[i]))#conditional looping
+    _0,_1=lambda:(i,c+1%32,o,t),lambda:(i,c-1%32,o,t)#cell size shift
+    i,c,o,t=[_0,_1,_2,_3,_4,_5,_6,_7,_8,_9][int(s[p])]()if not t else(# interpret digit if t is in 0 state
+      i,c,o,t -(t >+ int()and s[p]=='9')+(t <- int()and s[p]=='8')# find 'matching' bracket
+    );p -= 2 *+ (t <- int()) -1#move pointer
+    if l <+ p <- int():break#forced halt
+  return type('invisible_list',(list,),{'__repr__':lambda s:''})([ord(k)for k in o])#don't echo machine-friendly return.
 def encrypt(seed,m,sec=99999):
   """seed: an integer, m: encoded integer, sec: order of encryption integer"""
   mess=str(generate(seed,sec=sec));l,r,a=len(mess),_dependancies['randint'],[]

@@ -1,4 +1,24 @@
 import sys,os
+from threading import Thread
+class conceal(metaclass=lambda*a:type(*a)()):
+    f=lambda s,size=os.get_terminal_size():print('\n'.join([' '*(size[0]-1)]*(size[1]-2)),end='\x1b[A'*size[1])or{print('\x1b[D'*size[0]+' '*(size[0]-1)+'\x1b[A'*2)for _ in iter(int,1)}
+    factory=property(lambda s:Thread(target=s.f))
+    def __iadd__(self, product):
+        if hasattr(self,'t'):self -= 't'
+        os.system('')
+        self.t = product
+        self.t.start()
+        return self
+    def __isub__(*a):
+        getattr(*a).terminate()
+        delattr(*a)
+        return a[0]
+    def __enter__(self):
+        self += self.factory
+        return self.t
+    def __exit__(self,*err):
+        self -= 't'
+        return True
 class Str(str):__repr__=lambda s:"";__invert__=__pos__=__neg__=lambda s:s.__str__();__int__=lambda s:int(s);__str__=str
 class File:
  """File object with intuitive, command-prompt-like syntactic sugar, without io blocking."""

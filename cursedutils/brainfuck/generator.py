@@ -10,11 +10,11 @@ def code(
     "Cannot encode "+max(_0)+" into character size "+str(_1)
   ) ;-D
   for _00 in['']:_01: (list, "mem::code")=[ord(_)for _ in str(_0)]
-  _02:(list, "bf::mul-values")=[
-    _ for _ in range((max(_01)+2)//10)if any([__//10==_ for __ in _01])
+  _02:(list, "bf::mul-values")=[_
+for _ in range((max(_01)+2)//10)if any([__//10==_ for __ in _01])
   ];_02+=(max(_01)//10 not in _02)*[max(_01)//10]
   _00+='+'*10+'[>'+'>'.join([_*'+'for _ in _02])+'<'*len(_02)+'-]>'
-  _03:(int,"sys::pointer-shift state")=int()
+  _03:(int,"sys::pointer-shift state")=0
   _04:(list,'mem::turing-machine')=[0]*len(_02)
   for _10 in _01:
     _11:(tuple, ("chop off last digit","last digit"))=_10.__divmod__(10)
@@ -31,11 +31,9 @@ def code(
 
 if __name__ == '__main__':
     script:print (script) = code(
-        input('Message> ')
+input('Message> ')
     )
 else:
-    dict.__setitem__(
-        __import__('sys').modules,
-        'generator',
-        code
-    )
+    _:_ .modules = __import__('sys')
+    for i in['brainfuck.generator','generator','brainfuck.code']:_[i]=code
+    del _

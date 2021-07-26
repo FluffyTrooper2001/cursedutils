@@ -3,6 +3,7 @@ __pycache__
 *.py[cod]
 .idea/*
 .idea
+*.?ml
 */.idea/*
 .github/*
 _*.yml

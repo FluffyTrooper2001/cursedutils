@@ -18,8 +18,8 @@ Use provided abort function to cancel."""
   cls()
 def kill_python(*_):
  __import__('os').system("")or __import__('sys').stderr.write('\x1b[31mFatal Python error: _Py_Decessus: Python has died.\nPython runtime state: deceased\x1b[0m\r\n')
- import ctypes,random
- while...:ctypes.py_object.from_address(random.randint(111111,id(type("",(),{})())+9)).value=type('DEATH',(type,),{'__del__':lambda*a:a})('death',(),{})
+ from ctypes import*
+ py_object.from_address(0).value = 69
 try:from.wrappers import named_as as _named_as
 except ImportError:from wrappers import named_as as _named_as
 def raise_error(exception=_named_as('')(__import__('_locale')).Error,*args):raise exception(*args)

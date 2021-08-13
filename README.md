@@ -1,5 +1,7 @@
 [![wakatime](https://wakatime.com/badge/github/FluffyTrooper2001/cursedutils.svg)](https://wakatime.com/badge/github/FluffyTrooper2001/cursedutils)
-[![Coverage Status](https://img.shields.io/badge/coverage-420%25-brightgreen.svg)](https://https://coveralls.io/r/FluffyTrooper2001/cursedutils?branch=cursed)
+[![Coverage Status](https://img.shields.io/badge/coverage-420%25-brightgreen.svg)](https://coveralls.io/r/FluffyTrooper2001/cursedutils?branch=cursed)
+[![Cursed](https://img.shields.io/badge/cursed-max-darkblue.svg)](https://github.com/FluffyTrooper2001/cursedutils)
+[![Tests](https://img.shields.io/badge/test-crashed-darkred.svg)](https://efmsoft.com/what-is/?code=0xC0000005)
 
 # cursedutils
 do unholy things to python in order to aid developers to do unholy things to python.

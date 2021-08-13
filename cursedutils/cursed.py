@@ -172,6 +172,25 @@ def test_hacker():
         type. hello_world;
     print (False, not 0, not 1)
 
+class Cell:
+  _reg = {}
+  def __new__(cls, victim):
+    if id(victim)in cls._reg:return cls._reg[id(victim)]
+    else:return super().__new__(cls)
+  def __init__(self, prisoner):
+    from ctypes import*
+    type(self)._reg |= {id(prisoner):self}
+    self.cell_contents = prisoner
+    self._content_type = py_object.from_address(id(prisoner)+8).value
+  def hack(self, new:type):
+    from ctypes import*
+    victim = py_object.from_address(id(self.cell_contents)+8)
+    old, victim.value = victim.value, new
+    return old
+  def __del__(self):
+    self.hack(self._content_type)
+    del self._reg[id(self.cell_contents)]
+
 # dot notation
 def _bootstrap(*a):
   if __name__!='__main__':g=__import__('sys')._getframe(2).f_globals

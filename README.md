@@ -1,7 +1,11 @@
 [![wakatime](https://wakatime.com/badge/github/FluffyTrooper2001/cursedutils.svg)](https://wakatime.com/badge/github/FluffyTrooper2001/cursedutils)
 [![Coverage Status](https://img.shields.io/badge/coverage-420%25-brightgreen.svg)](https://coveralls.io/r/FluffyTrooper2001/cursedutils?branch=cursed)
-[![Cursed](https://img.shields.io/badge/cursed-max-darkblue.svg)](https://github.com/FluffyTrooper2001/cursedutils)
-[![Tests](https://img.shields.io/badge/test-crashed-darkred.svg)](https://efmsoft.com/what-is/?code=0xC0000005)
+[![Tests](https://img.shields.io/badge/tests-crashed-darkred.svg)](https://efmsoft.com/what-is/?code=0xC0000005)
+[![cursed](https://img.shields.io/badge/cursed-maximum-darkblue.svg)](https://git.jetbrains.space/flippity-floppity-funny-looking/CURSED/cursedutils.git)
+[![Exit Code](https://img.shields.io/badge/exit_code:-0xc000005-red.svg)](https://efmsoft.com/what-is/?code=0xC0000005)
+[![Exit Code](https://img.shields.io/badge/exit_code:-139-red.svg)](https://www.geeksforgeeks.org/exit-codes-in-c-c-with-examples/)
+[![NTSTATUS](https://img.shields.io/badge/ntstatus-0xc0000005-red.svg)](https://efmsoft.com/what-is/?code=0xC0000005)
+
 
 # cursedutils
 do unholy things to python in order to aid developers to do unholy things to python.

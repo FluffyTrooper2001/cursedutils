@@ -9,6 +9,7 @@
 
 # cursedutils
 do unholy things to python in order to aid developers to do unholy things to python.
+Open to pull requests, ideally this would become a community effort.
 
 # API
 This module uses an advanced field of python called "Esoteric Python" in order to optimise the terribleness of the code.
